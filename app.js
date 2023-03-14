@@ -22,19 +22,22 @@ ioSocketServer.on("connection", (socket) => {
   const online = [...connectedSockets.keys()].filter(
     (val) => val != metaData.id
   )
+  console.log("EMIT ADDIDs for", metaData.id, online)
   socket.emit("addID", online)
   socket.broadcast.emit("addID", [metaData.id])
 
-  // Listener for outgoing offers
-  socket.on("offer", (offer, id) => {
-    // Send offer to target
-    connectedSockets.get(id).emit("offer", offer, metaData.id)
+  // Listener for outgoing candidates
+  socket.on("candidate", (candidate, id) => {
+    // Send candidate to target
+    connectedSockets.get(id).emit("candidate", candidate, metaData.id)
+    console.log("Candidate from", metaData.id)
   })
 
-  // Listen for outgoing answer
-  socket.on("answer", (answer, id) => {
-    // Emit answer to original offerer
-    connectedSockets.get(id).emit("answer", answer, metaData.id)
+  // Listener for outgoing session
+  socket.on("session", (offer, id, answer) => {
+    // Send session to target
+    connectedSockets.get(id).emit("session", offer, metaData.id, answer)
+    console.log("Session from", metaData.id)
   })
 
   socket.on("disconnect", () => {
