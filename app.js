@@ -23,7 +23,6 @@ ioSocketServer.on("connection", (socket) => {
     (val) => val != metaData.id
   )
   console.log("EMIT ADDIDs for", metaData.id, online)
-  socket.emit("addID", online)
   socket.broadcast.emit("addID", [metaData.id])
 
   // Listener for outgoing candidates
