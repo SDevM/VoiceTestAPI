@@ -28,11 +28,12 @@ ioSocketServer.on("connection", (socket) => {
   socket.on("offer", (offer, id) => {
     // Send offer to target
     connectedSockets.get(id).emit("offer", offer, metaData.id)
-    // Listen for outgoing answer
-    socket.on("answer", (answer, id) => {
-      // Emit answer to original offerer
-      socket.emit("answer", answer, id)
-    })
+  })
+
+  // Listen for outgoing answer
+  socket.on("answer", (answer, id) => {
+    // Emit answer to original offerer
+    connectedSockets.get(id).emit("answer", answer, metaData.id)
   })
 
   socket.on("disconnect", () => {
