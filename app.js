@@ -40,6 +40,6 @@ ioSocketServer.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     connectedSockets.delete(metaData.id)
-    socket.broadcast().emit("delID", metaData.id)
+    socket.broadcast.emit("delID", metaData.id)
   })
 })
