@@ -25,7 +25,7 @@ ioSocketServer.on("connection", (socket) => {
 
   // Listener for outgoing offers
   // socket : Offer maker
-  socket.on("offer", (offer) => {
+  socket.on("offer", (offer, id) => {
     // Send offer to target
     connectedSockets.get(id).emit("offer", offer, metaData.id)
     // Listen for outgoing answer
