@@ -21,7 +21,7 @@ ioSocketServer.on("connection", (socket) => {
   connectedSockets.set(metaData.id, socket)
   const online = [...connectedSockets.keys()]
   socket.emit("addID", online)
-  socket.broadcast().emit("addID", [metaData.id])
+  socket.broadcast.emit("addID", [metaData.id])
 
   // Listener for outgoing offers
   // socket : Offer maker
