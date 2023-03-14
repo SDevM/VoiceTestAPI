@@ -19,7 +19,9 @@ ioSocketServer.on("connection", (socket) => {
     id: socket.id,
   }
   connectedSockets.set(metaData.id, socket)
-  const online = [...connectedSockets.keys()]
+  const online = [...connectedSockets.keys()].filter(
+    (val) => val != metaData.id
+  )
   socket.emit("addID", online)
   socket.broadcast.emit("addID", [metaData.id])
 
