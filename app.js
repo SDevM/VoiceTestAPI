@@ -1,5 +1,6 @@
 require("dotenv").config()
 const http = require("http")
+const { connect } = require("http2")
 const { Server } = require("socket.io")
 const httpServer = http.createServer()
 const ioSocketServer = new Server(httpServer)
@@ -18,16 +19,24 @@ ioSocketServer.on("connection", (socket) => {
     id: socket.id,
   }
   connectedSockets.set(metaData.id, socket)
+  const online = [...connectedSockets.keys()]
+  socket.emit("addID", online)
+  socket.broadcast().emit("addID", [metaData.id])
 
   // Listener for outgoing offers
   // socket : Offer maker
-  socket.on("makeOffer", (offer) => {
-    // Broadcast offer
-    socket.broadcast().emit("makeOffer", offer)
+  socket.on("offer", (offer) => {
+    // Send offer to target
+    connectedSockets.get(id).emit("offer", offer, metaData.id)
     // Listen for outgoing answer
-    socket.on("getAnswer", (answer) => {
+    socket.on("answer", (answer, id) => {
       // Emit answer to original offerer
-      socket.emit("getAnswer", answer)
+      socket.emit("answer", answer, id)
     })
+  })
+
+  socket.on("disconnect", () => {
+    connectedSockets.delete(metaData.id)
+    socket.broadcast().emit("delID", metaData.id)
   })
 })
