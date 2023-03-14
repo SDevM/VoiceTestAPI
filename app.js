@@ -26,7 +26,6 @@ ioSocketServer.on("connection", (socket) => {
   socket.broadcast.emit("addID", [metaData.id])
 
   // Listener for outgoing offers
-  // socket : Offer maker
   socket.on("offer", (offer, id) => {
     // Send offer to target
     connectedSockets.get(id).emit("offer", offer, metaData.id)
