@@ -20,6 +20,7 @@ ioSocketServer.on("connection", (socket) => {
   connectedSockets.set(metaData.id, socket)
 
   // Listener for outgoing offers
+  // socket : Offer maker
   socket.on("makeOffer", (offer) => {
     // Broadcast offer
     socket.broadcast().emit("makeOffer", offer)
