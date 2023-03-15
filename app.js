@@ -27,6 +27,7 @@ ioSocketServer.on("connection", (socket) => {
       (val) => val != metaData.id
     )
 
+    console.log("entire", connectedSockets.keys())
     console.log("Emit new for", metaData.id, online)
     socket.emit("new", metaData.id, online)
   })
@@ -35,7 +36,13 @@ ioSocketServer.on("connection", (socket) => {
   socket.on("peer", (peer, response) => {
     // Send peer key to target
     connectedSockets.get(peer).emit("peer", metaData.id, response)
-    console.log("Peer invitation from", metaData.id)
+    console.log("Peer invitation from", metaData.id, " to ", peer)
+  })
+
+  // Listener for outgoing connection requests
+  socket.on("connect", (peer) => {
+    // Send peer key to target
+    connectedSockets.get(peer).emit("connect", metaData.id)
   })
 
   // Listener for disconnected peers
