@@ -26,7 +26,7 @@ ioSocketServer.on("connection", (socket) => {
     const online = [...connectedSockets.keys()].filter(
       (val) => val != metaData.id
     )
-    console.log("EMIT NEW for", metaData.id, online)
+    console.log("Emit new for", metaData.id, online)
     socket.emit("new", online)
   })
 
