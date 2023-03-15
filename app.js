@@ -26,8 +26,9 @@ ioSocketServer.on("connection", (socket) => {
     const online = [...connectedSockets.keys()].filter(
       (val) => val != metaData.id
     )
+
     console.log("Emit new for", metaData.id, online)
-    socket.emit("new", online)
+    socket.emit("new", metaData.id, online)
   })
 
   // Listener for outgoing peer keys
