@@ -40,9 +40,9 @@ ioSocketServer.on("connection", (socket) => {
   })
 
   // Listener for outgoing connection requests
-  socket.on("connect", (peer) => {
+  socket.on("channel", (peer) => {
     // Send peer key to target
-    connectedSockets.get(peer).emit("connect", metaData.id)
+    connectedSockets.get(peer).emit("channel", metaData.id)
   })
 
   // Listener for disconnected peers
