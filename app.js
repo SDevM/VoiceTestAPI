@@ -16,14 +16,19 @@ const connectedSockets = new Map()
 ioSocketServer.on("connection", (socket) => {
   // Initialize metaData and create entry for new socket in connectedSockets map
   const metaData = {
-    id: socket.id,
+    id: undefined,
   }
-  connectedSockets.set(metaData.id, socket)
-  const online = [...connectedSockets.keys()].filter(
-    (val) => val != metaData.id
-  )
-  console.log("EMIT NEW for", metaData.id, online)
-  socket.emit("new", online)
+
+  // Listener for new peer keys
+  socket.on("set", (id) => {
+    metaData.id = id
+    console.log("EMIT NEW for", metaData.id, online)
+    connectedSockets.set(metaData.id, socket)
+    const online = [...connectedSockets.keys()].filter(
+      (val) => val != metaData.id
+    )
+    socket.emit("new", online)
+  })
 
   // Listener for outgoing peer keys
   socket.on("peer", (offer, id) => {
@@ -32,6 +37,7 @@ ioSocketServer.on("connection", (socket) => {
     console.log("Peer invitation from", metaData.id)
   })
 
+  // Listener for disconnected peers
   socket.on("disconnect", () => {
     connectedSockets.delete(metaData.id)
     socket.broadcast.emit("delID", metaData.id)
