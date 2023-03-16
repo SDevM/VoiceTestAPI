@@ -33,9 +33,9 @@ ioSocketServer.on("connection", (socket) => {
   })
 
   // Listener for outgoing peer keys
-  socket.on("peer", (peer, response) => {
+  socket.on("peer", (peer) => {
     // Send peer key to target
-    connectedSockets.get(peer).emit("peer", metaData.id, response)
+    connectedSockets.get(peer).emit("peer", metaData.id)
     console.log("Peer invitation from", metaData.id, " to ", peer)
   })
 
